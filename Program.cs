@@ -34,8 +34,7 @@ switch (input)
             return;
         }
 
-        // convert the record to uppercase before we add it to the database
-        if (newDepartment != null) repo.InsertDepartment(newDepartment.ToUpper());
+        if (newDepartment != null) repo.InsertDepartment(newDepartment);
 
         var updatedDepartments = departments.ToList();
 
