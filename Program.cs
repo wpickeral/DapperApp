@@ -1,15 +1,14 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using System;
 using System.Data;
 
 var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
 
-string connString = config.GetConnectionString("DefaultConnection");
+var connString = config.GetConnectionString("DefaultConnection");
 
 IDbConnection conn = new MySqlConnection(connString);
 var repo = new DapperDepartmentRepository(conn);
@@ -30,12 +29,13 @@ switch (input)
 
         if (newDepartmentNameTaken)
         {
-            Console.WriteLine($"The deparment name: \"{newDepartment} already exists, please try again with a different name.");
+            Console.WriteLine(
+                $"The department name: \"{newDepartment} already exists, please try again with a different name.");
             return;
         }
 
         // convert the record to uppercase before we add it to the database
-        repo.InsertDepartment(newDepartment.ToUpper());
+        if (newDepartment != null) repo.InsertDepartment(newDepartment.ToUpper());
 
         var updatedDepartments = departments.ToList();
 
@@ -43,7 +43,8 @@ switch (input)
         {
             Console.WriteLine(dept.Name);
         }
-        // We add the new deparment name to the list rather than doing another query
+
+        // We add the new department name to the list rather than doing another query
         Console.WriteLine(newDepartment);
 
         Console.WriteLine($"\n\"{newDepartment}\" successfully added");
@@ -57,9 +58,10 @@ switch (input)
             Console.WriteLine(dept.Name);
         }
 
-        Console.Write("\nPlease enter the depaartment you want to delete:");
+        Console.Write("\nPlease enter the department you want to delete:");
         var departmentToDelete = Console.ReadLine();
-        repo.DeleteOneDepartment(departmentToDelete);
+
+        if (departmentToDelete != null) repo.DeleteOneDepartment(departmentToDelete);
         break;
     default:
         Console.WriteLine("Invalid input.");

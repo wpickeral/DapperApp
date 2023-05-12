@@ -7,6 +7,7 @@ namespace Dapper
     public class DapperDepartmentRepository : IDepartmentRepository
     {
         private readonly IDbConnection _connection;
+
         public DapperDepartmentRepository(IDbConnection connection)
         {
             _connection = connection;
@@ -19,15 +20,19 @@ namespace Dapper
 
         public void InsertDepartment(string newDepartmentName)
         {
-            _connection.Execute("INSERT INTO departments (Name) VALUES (@departmentName);", new { departmentName = newDepartmentName });
+            _connection.Execute("INSERT INTO departments (Name) VALUES (@departmentName);",
+                new { departmentName = newDepartmentName });
         }
 
         public void DeleteOneDepartment(string departmentName)
         {
             try
             {
-                var department = _connection.QuerySingle("SELECT DepartmentID FROM departments WHERE Name = @departmentName", new { departmentName = departmentName });
-                _connection.Execute("DELETE FROM departments WHERE DepartmentId = (@departmentId);", new { departmentId = department.DepartmentID });
+                var department = _connection.QuerySingle(
+                    "SELECT DepartmentID FROM departments WHERE Name = @departmentName",
+                    new { departmentName = departmentName });
+                _connection.Execute("DELETE FROM departments WHERE DepartmentId = (@departmentId);",
+                    new { departmentId = department.DepartmentID });
 
                 Console.WriteLine($"{departmentName} successfully deleted");
             }

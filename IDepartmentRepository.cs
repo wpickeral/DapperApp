@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Dapper
+﻿namespace Dapper
 {
     public interface IDepartmentRepository
     {
         IEnumerable<Department> GetDepartments();
     }
 }
-
